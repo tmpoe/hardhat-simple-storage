@@ -1,5 +1,11 @@
-const { ethers } = require("hardhat")
+/* const { ethers } = require("hardhat")
 const { expect, assert } = require("chai")
+ */
+
+import { ethers } from "hardhat"
+import { assert } from "chai"
+import { TransactionResponse } from "@ethersproject/providers"
+import { BigNumber } from "ethers"
 
 describe("SimpleStorage", () => {
   let simpleStorage
@@ -11,14 +17,16 @@ describe("SimpleStorage", () => {
   })
 
   it("Should start with a favourite number of zeros", async () => {
-    const currentValue = await simpleStorage.retrieve()
+    const currentValue: BigNumber = await simpleStorage.retrieve()
     assert.equal(currentValue.toString(), "0")
   })
 
   it("Should update when we call store", async () => {
-    const transactionResponse = await simpleStorage.store("7")
+    const transactionResponse: TransactionResponse = await simpleStorage.store(
+      "7"
+    )
     await transactionResponse.wait(1)
-    const currentValue = await simpleStorage.retrieve()
+    const currentValue: BigNumber = await simpleStorage.retrieve()
     assert.equal(currentValue.toString(), "7")
   })
 })
