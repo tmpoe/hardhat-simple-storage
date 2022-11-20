@@ -9,14 +9,20 @@ const { network } = require("hardhat")
 const hre = require("hardhat") */
 
 import { TransactionResponse } from "@ethersproject/providers"
-import { BigNumber, ContractFactory, Contract } from "ethers"
+import { BigNumber } from "ethers"
 import hre from "hardhat"
 
-async function main() {
-  const SimpleStorageFactory: ContractFactory =
-    await hre.ethers.getContractFactory("SimpleStorage")
+import { SimpleStorage__factory } from "../typechain-types/factories/SimpleStorage__factory"
+import { SimpleStorage } from "../typechain-types/SimpleStorage"
 
-  const simpleStorage: Contract = await SimpleStorageFactory.deploy()
+async function main() {
+  const SimpleStorageFactory: SimpleStorage__factory =
+    (await hre.ethers.getContractFactory(
+      "SimpleStorage"
+    )) as SimpleStorage__factory
+
+  const simpleStorage: SimpleStorage =
+    (await SimpleStorageFactory.deploy()) as SimpleStorage
   await simpleStorage.deployed()
   console.log(simpleStorage.address)
 
@@ -37,14 +43,14 @@ async function main() {
   console.log(newValue)
 }
 
-async function verify(contractAddress, constructorArgs) {
+async function verify(contractAddress: string, constructorArgs: any[]) {
   console.log("Verifying contract...")
   try {
     hre.run("verify:verify", {
       address: contractAddress,
       constructorArguments: constructorArgs,
     })
-  } catch (e) {
+  } catch (e: any) {
     if (e.message.toLowerCase().includes("already verified")) {
       console.log("Contract already verified")
     } else {
