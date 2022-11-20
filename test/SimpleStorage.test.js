@@ -14,4 +14,11 @@ describe("SimpleStorage", () => {
     const currentValue = await simpleStorage.retrieve()
     assert.equal(currentValue.toString(), "0")
   })
+
+  it("Should update when we call store", async () => {
+    const transactionResponse = await simpleStorage.store("7")
+    await transactionResponse.wait(1)
+    const currentValue = await simpleStorage.retrieve()
+    assert.equal(currentValue.toString(), "7")
+  })
 })
